@@ -1,0 +1,2 @@
+For all the commits related to 'xxx-xxxx' prefix, i want to do a git history cleanup of this branch using git rebase. I made commits adding new things but then made a lot of modifications and fixes. id like to clean up git history so that it looks like I added the new features in a deliberate way perfectly from the start. so a few big commits scoped to whatever specific features makes sense to bundle together.
+the branch should have zero code changes after this git history cleanup, just changes to git history.
