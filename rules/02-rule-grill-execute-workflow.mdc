@@ -1,0 +1,73 @@
+---
+description: Mandatory workflow — grill-me → record plan → superpowers analysis → execute
+alwaysApply: true
+---
+
+# Grill → Plan → Analyze → Execute
+
+Rule 0 (greeting) and Rule 1 (code rules) still apply first. This rule governs **how work proceeds** once a task is identified.
+
+## When this applies
+
+Any task that will change code, config, docs, or repo state — including refactors, bug fixes, and feature work.
+
+**Skip only when** the user explicitly says to skip (e.g. "取消 grill-me", "just answer", "skip workflow") or the request is purely informational with no execution.
+
+## Phase 1 — Grill (`/grill-me`)
+
+1. Read and follow `grilling` skill (`~/.agents/skills/grilling/SKILL.md`).
+2. Work the design tree in rounds until the frontier is empty.
+3. **Do not write code, edit files, or execute the plan** until the user confirms shared understanding.
+
+Announce: `Using grilling to [purpose]`.
+
+## Phase 2 — Record plan (before execution)
+
+After grill-me is complete and confirmed, write the agreed plan **before** any implementation action.
+
+**Save to** (first match wins):
+- `docs/superpowers/plans/YYYY-MM-DD-<topic>.md` if `docs/superpowers/` exists
+- otherwise `.cursor/plans/YYYY-MM-DD-<topic>.md`
+
+**Plan must include:**
+- Goal and success criteria
+- Settled decisions from grill rounds (with rejected alternatives noted)
+- Files/areas to touch
+- Ordered execution steps
+- How to verify
+
+Tell the user the plan file path. Wait for explicit approval before Phase 3 unless they already approved during grilling.
+
+## Phase 3 — Superpowers analysis (once, before execute)
+
+Before Phase 4, run **one** superpowers analysis pass:
+
+1. Read `using-superpowers` skill.
+2. Pick and invoke the **single best-fit** process skill for this plan:
+   - new feature / behavior change → `brainstorming`
+   - bug / failure → `systematic-debugging`
+   - multi-step implementation → `writing-plans` (may refine the recorded plan)
+   - pre-merge / completion check → `verification-before-completion`
+3. Summarize findings: risks, gaps vs plan, recommended adjustments.
+4. If analysis changes the plan, update the plan file and get re-approval.
+
+Announce: `Using [skill] to analyze plan before execution`.
+
+## Phase 4 — Execute
+
+Only after Phases 1–3 are done:
+
+1. Follow the approved plan.
+2. Use implementation skills as needed (TDD, domain skills, etc.).
+3. Checkpoint after significant steps (per code rules Rule 7).
+4. Verify before claiming done (`verification-before-completion`).
+
+## Hard gates
+
+| Phase | Blocked until |
+|-------|----------------|
+| Record plan | Grill confirmed |
+| Superpowers analysis | Plan written |
+| Execute | Analysis done + plan approved |
+
+Never skip phases silently. If a phase is skipped by user request, say so explicitly.
